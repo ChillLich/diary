@@ -14,7 +14,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-# from django.contrib import admin
 from django.urls import path
 
 from . import views
@@ -22,8 +21,27 @@ from . import views
 app_name = "blog"
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("all-posts", views.all_posts, name="all_posts"),
-    path("posts/<int:id>/", views.post_detail, name="post_detail"),
-    path("category/<slug:category_slug>/", views.category_posts, name="category_posts"),
+    path("", views.PostsListView.as_view(), name="index"),
+    path("posts/<int:pk>/", views.PostDetailView.as_view(), name="post_detail"),
+    path("posts/<int:pk>/edit/", views.EditPostView.as_view(), name="edit_post"),
+    path("posts/<int:pk>/delete/", views.DeletePostView.as_view(), name="delete_post"),
+    path("posts/<int:post_id>/comment/", views.CommentPostView.as_view(), name="add_comment"),
+    path(
+        "posts/<int:post_id>/edit_comment/<int:comment_id>/",
+        views.EditCommentView.as_view(),
+        name="edit_comment",
+    ),
+    path(
+        "posts/<int:post_id>/delete_comment/<int:comment_id>/",
+        views.DeleteCommentView.as_view(),
+        name="delete_comment",
+    ),
+    path("posts/create/", views.CreatePostView.as_view(), name="create_post"),
+    path(
+        "category/<slug:category_slug>/",
+        views.CategoryPostsListView.as_view(),
+        name="category_posts",
+    ),
+    path("profile/edit/", views.EditProfileView.as_view(), name="edit_profile"),
+    path("profile/<slug:username>/", views.UserProfileView.as_view(), name="profile"),
 ]

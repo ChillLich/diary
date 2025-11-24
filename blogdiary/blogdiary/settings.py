@@ -33,12 +33,14 @@ ALLOWED_HOSTS = ["127.0.0.1"]
 INSTALLED_APPS = [
     "pages.apps.PagesConfig",
     "blog.apps.BlogConfig",
+    "core.apps.CoreConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_bootstrap5",
     "debug_toolbar",
 ]
 
@@ -113,11 +115,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "ru-RU"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -136,6 +138,21 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# для DJDT
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+CSRF_FAILURE_VIEW = "pages.views.csrf_failure"
+
+AUTH_USER_MODEL = "core.MyUser"
+
+LOGIN_REDIRECT_URL = "blog:index"
+LOGIN_URL = "login"
+
+MEDIA_ROOT = BASE_DIR / "media"
+
+# Подключаем бэкенд filebased.EmailBackend:
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+# Указываем директорию, в которую будут сохраняться файлы писем:
+EMAIL_FILE_PATH = BASE_DIR / "sent_emails"

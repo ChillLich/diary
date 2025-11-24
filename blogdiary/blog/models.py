@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.urls import reverse
 
 User = get_user_model()
 
@@ -85,6 +86,7 @@ class Post(MostCommonFieldsModel):
         related_name="post",
         verbose_name="Автор публикации",
     )
+    image = models.ImageField("Фото", upload_to="posts_images", blank=True)
 
     class Meta:
         verbose_name = "публикация"
@@ -93,3 +95,29 @@ class Post(MostCommonFieldsModel):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        #  reverse() возвращает URL объекта. для CBV
+        return reverse("blog:profile", kwargs={"username": self.author.username})
+
+
+class PostComments(models.Model):
+    text = models.TextField("Комментарий", max_length=512)
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name="comments",
+    )
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор комментария")
+    created_at = models.DateTimeField("Дата комментария", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "комментарий"
+        verbose_name_plural = "Комментарии"
+        ordering = ("created_at",)
+
+    def __str__(self):
+        return f"Комментарий поста - {self.post}"
+
+    def get_absolute_url(self):
+        return reverse("blog:post_detail", kwargs={"pk": self.post.id})
