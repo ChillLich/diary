@@ -46,7 +46,7 @@ blogdiary/
 
 ```bash
 # Клонирование репозитория
-git clone https://github.com/ChillLich/blogdiary.git
+git clone https://github.com/ChillLich/diary.git
 cd blogdiary
 
 # Создание виртуального окружения
